@@ -6,6 +6,7 @@ import {
   Weather, weatherLabel, WEEKDAY, winterWeek, yen,
 } from './lib';
 import { buildDay, Item } from './schedule';
+import { THEMES, themeCss } from './themes';
 
 const LOW_TEXT: Record<string, string> = {
   'm-eat': '吃早饭 + 维生素',
@@ -24,6 +25,15 @@ export default function App() {
   const [weatherState, setWeatherState] = useState<'loading' | 'ok' | 'fail'>('loading');
 
   useEffect(() => saveStore(store), [store]);
+  useEffect(() => {
+    let el = document.getElementById('theme-css');
+    if (!el) {
+      el = document.createElement('style');
+      el.id = 'theme-css';
+      document.head.appendChild(el);
+    }
+    el.textContent = themeCss(store.settings.theme);
+  }, [store.settings.theme]);
   useEffect(() => {
     const id = setInterval(() => setToday(logicalToday()), 60 * 1000);
     return () => clearInterval(id);
@@ -772,6 +782,25 @@ function Settings({ store, update }: { store: Store; update: Upd }) {
       <summary>
         <h2>⚙️ 设置</h2>
       </summary>
+      <div className="seg-label wide">配色</div>
+      <div className="themes" role="group" aria-label="配色">
+        {THEMES.map((t) => (
+          <button
+            key={t.id}
+            type="button"
+            className="theme"
+            aria-pressed={store.settings.theme === t.id}
+            onClick={() => update((s) => void (s.settings.theme = t.id))}
+          >
+            <span className="pills">
+              {t.swatches.map((c) => (
+                <i key={c} style={{ background: c }} />
+              ))}
+            </span>
+            <span className="tname">{t.name}</span>
+          </button>
+        ))}
+      </div>
       <Segment
         label="季节"
         value={store.settings.season}

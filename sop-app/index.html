@@ -129,6 +129,14 @@
       .plist li.soon b { color: var(--warn); }
       .plist li.due b { color: var(--urgent); }
       .btns { display: flex; gap: 6px; flex: none; }
+      .seg-label.wide { width: auto; }
+      .themes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .theme { border: 1.5px solid var(--line); background: var(--bg); border-radius: 14px; padding: 10px 6px 8px; display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; }
+      .theme[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+      .pills { display: flex; gap: 3px; }
+      .pills i { width: 9px; height: 30px; border-radius: 99px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); }
+      .tname { font-size: 12px; color: var(--muted); }
+      .theme[aria-pressed="true"] .tname { color: var(--ink); }
       .foot { text-align: center; font-size: 12px; color: var(--muted); margin: 0; }
       @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
     </style>

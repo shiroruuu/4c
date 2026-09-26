@@ -1,4 +1,5 @@
 import { CONFIG, PERIODIC, PeriodicDef } from './config';
+import { DEFAULT_THEME } from './themes';
 
 // ---------- 日期 ----------
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -51,7 +52,7 @@ export type Store = {
   card: Record<string, boolean>;
   money: Record<string, { debit?: number; done: Record<string, boolean> }>;
   weekly: Record<string, Record<string, boolean>>;
-  settings: { season: 'auto' | 'summer' | 'winter'; weekSwap: boolean };
+  settings: { season: 'auto' | 'summer' | 'winter'; weekSwap: boolean; theme: string };
 };
 
 const KEY = 'xiaorizi-sop-v1';
@@ -67,7 +68,7 @@ export function loadStore(): Store {
     card: {},
     money: {},
     weekly: {},
-    settings: { season: 'auto', weekSwap: false },
+    settings: { season: 'auto', weekSwap: false, theme: DEFAULT_THEME },
   };
   try {
     const raw = localStorage.getItem(KEY);
