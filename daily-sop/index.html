@@ -1,0 +1,396 @@
+<title>小日子 SOP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#EEF2F0; --surface:#FBFCFB; --surface-2:#E3EBE7; --ink:#22302A; --muted:#667770;
+  --line:#D3DDD8; --accent:#3D7866; --accent-soft:#D4E6DE; --on-accent:#FFFFFF;
+  --low:#A8674A; --low-soft:#F2E1D8; --focus:#2F6FB3;
+  --serif:"Noto Serif SC","Songti SC","STSong",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#131917; --surface:#1B2320; --surface-2:#232E2A; --ink:#E3EBE7; --muted:#95A69F;
+    --line:#2F3C37; --accent:#7EC2AC; --accent-soft:#24413A; --on-accent:#0F1714;
+    --low:#E0A386; --low-soft:#3A2A23; --focus:#8AB8EA;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#131917; --surface:#1B2320; --surface-2:#232E2A; --ink:#E3EBE7; --muted:#95A69F;
+  --line:#2F3C37; --accent:#7EC2AC; --accent-soft:#24413A; --on-accent:#0F1714;
+  --low:#E0A386; --low-soft:#3A2A23; --focus:#8AB8EA;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.6}
+.wrap{max-width:720px;margin:0 auto;padding-inline:16px;padding-block:28px 64px;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:var(--serif);font-weight:700;margin:0;text-wrap:balance}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:6px}
+
+/* header */
+.top{display:flex;flex-direction:column;gap:14px}
+.date{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+.hello{font-size:26px;line-height:1.35}
+.hello small{display:block;font-family:var(--sans);font-weight:400;font-size:14px;color:var(--muted);margin-top:4px}
+.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.mode{display:inline-flex;background:var(--surface-2);border-radius:999px;padding:3px}
+.mode button{border:0;background:transparent;padding:6px 14px;border-radius:999px;cursor:pointer;font-size:14px;color:var(--muted)}
+.mode button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.mode button.low[aria-pressed="true"]{color:var(--low)}
+.overall{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.track{width:120px;height:6px;background:var(--surface-2);border-radius:99px;overflow:hidden}
+.track i{display:block;height:100%;background:var(--accent);width:0;transition:width .4s ease}
+.lownote{background:var(--low-soft);color:var(--ink);border-radius:12px;padding:10px 14px;font-size:14px}
+.lownote b{color:var(--low)}
+
+/* week strip */
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.day{display:flex;flex-direction:column;align-items:center;gap:4px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.dot{width:100%;max-width:40px;aspect-ratio:1;border-radius:10px;background:var(--surface-2);position:relative;overflow:hidden}
+.dot i{position:absolute;left:0;right:0;bottom:0;background:var(--accent);opacity:.85}
+.day.today{color:var(--ink);font-weight:500}
+.day.today .dot{outline:1.5px solid var(--accent);outline-offset:2px}
+.day .m{font-size:13px;height:16px;font-family:var(--sans)}
+
+/* nav */
+nav.jump{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:8px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-inline:-16px;padding-inline:16px}
+nav.jump a{flex:none;text-decoration:none;color:var(--muted);font-size:14px;padding:5px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+nav.jump a:hover{color:var(--ink)}
+nav.jump .stuck{border-color:var(--accent);color:var(--accent);cursor:pointer;background:var(--surface)}
+
+/* sections */
+section{display:flex;flex-direction:column;gap:12px;scroll-margin-top:60px}
+.sh{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.sh h2{font-size:20px}
+.sh .when{font-family:var(--mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.sh .count{font-family:var(--mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.intro{margin:0;color:var(--muted);font-size:14px}
+ul.list{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+ul.list li+li{border-top:1px solid var(--line)}
+.item{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;padding:12px 14px;cursor:pointer;width:100%;text-align:left;border:0;background:transparent}
+.item:hover{background:color-mix(in srgb,var(--surface-2) 50%,transparent)}
+.box{width:22px;height:22px;border-radius:7px;border:1.5px solid var(--line);display:grid;place-items:center;margin-top:1px;transition:background .2s,border-color .2s}
+.box svg{width:14px;height:14px;opacity:0;transition:opacity .15s}
+.item[aria-checked="true"] .box{background:var(--accent);border-color:var(--accent)}
+.item[aria-checked="true"] .box svg{opacity:1}
+.item[aria-checked="true"] .t{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line)}
+.t{display:block;font-size:15px}
+.mini{display:block;font-size:13px;color:var(--muted);margin-top:2px}
+.mini b{font-weight:500;color:var(--accent)}
+.time{font-family:var(--mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:3px}
+body.is-low .item .mini b{color:var(--low)}
+body.is-low .item[data-core="0"]{display:none}
+body.is-low ul.list li:has(.item[data-core="0"]){display:none}
+
+/* chores */
+.chore-today{display:flex;flex-wrap:wrap;gap:6px;font-size:13px;color:var(--muted)}
+.chip{font-family:var(--mono);font-size:11px;letter-spacing:.06em;background:var(--accent-soft);color:var(--ink);padding:2px 8px;border-radius:99px}
+details.plan{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 14px}
+details.plan summary{cursor:pointer;padding-block:8px;font-size:14px;color:var(--muted)}
+.table-wrap{overflow-x:auto;padding-bottom:10px}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:420px}
+th,td{text-align:left;padding:6px 8px;border-top:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-weight:500;color:var(--muted);white-space:nowrap}
+tr.is-today td,tr.is-today th{background:var(--accent-soft)}
+
+/* mood + first aid */
+.mood{display:flex;flex-wrap:wrap;gap:8px}
+.mood button{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:8px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:64px;font-size:13px;color:var(--muted)}
+.mood button span{font-family:var(--serif);font-size:18px;color:var(--ink)}
+.mood button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--ink)}
+.aid{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.aid h3{font-size:16px}
+.aid ol{margin:0;padding:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+.aid li{counter-increment:s;display:grid;grid-template-columns:28px 1fr;gap:10px;font-size:14px}
+.aid li::before{content:counter(s);font-family:var(--mono);font-size:12px;width:24px;height:24px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;color:var(--muted)}
+.aid li b{display:block;font-weight:600}
+.aid li span{color:var(--muted)}
+.linkbtn{border:0;background:none;padding:0;color:var(--accent);text-decoration:underline;cursor:pointer;font-size:14px}
+
+/* stuck panel */
+.stuckp{background:var(--ink);color:var(--bg);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.stuckp h3{font-size:18px}
+.stuckp p{margin:0;font-size:14px;opacity:.85}
+.stuckp ol{margin:0;padding-left:20px;font-size:14px;display:flex;flex-direction:column;gap:6px}
+.timer{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.clock{font-family:var(--mono);font-size:34px;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.stuckp button{border:1px solid color-mix(in srgb,var(--bg) 40%,transparent);background:transparent;color:var(--bg);border-radius:999px;padding:6px 14px;cursor:pointer;font-size:14px}
+.stuckp button.primary{background:var(--bg);color:var(--ink);border-color:var(--bg)}
+.foot{font-size:12px;color:var(--muted);text-align:center}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="date" id="date">—</div>
+    <h1 class="hello" id="hello">早安呀<small>今天只需要一件一件来。</small></h1>
+    <div class="bar">
+      <div class="mode" role="group" aria-label="今天的电量">
+        <button id="mode-normal" type="button" aria-pressed="true">正常电量</button>
+        <button id="mode-low" class="low" type="button" aria-pressed="false">低电量模式</button>
+      </div>
+      <div class="overall"><div class="track"><i id="overall-bar"></i></div><span id="overall-num">0 / 0</span></div>
+    </div>
+    <div class="lownote" id="lownote" hidden><b>低电量模式</b>：只留下核心几件事，每件都换成最小版本。做到这些，今天就算完成。</div>
+    <div class="week" id="week" aria-label="最近 7 天"></div>
+  </header>
+
+  <nav class="jump" aria-label="跳转">
+    <a href="#morning">早晨</a><a href="#evening">下班后</a><a href="#night">睡前</a><a href="#chores">家务</a><a href="#care">情绪</a>
+    <button class="stuck" type="button" id="stuck-open">我卡住了</button>
+  </nav>
+
+  <div class="stuckp" id="stuck" hidden>
+    <h3>卡住了也没关系</h3>
+    <p>启动难，是因为大脑把整件事看成一座山。我们只挪一块小石头。</p>
+    <ol>
+      <li>说出<b>下一步最小的动作</b>：不是「打扫房间」，是「把桌上那个杯子拿去厨房」。</li>
+      <li>按下面的 5 分钟计时，只承诺做 5 分钟。</li>
+      <li>时间到了可以停，停下也算赢。想继续就继续。</li>
+    </ol>
+    <div class="timer">
+      <div class="clock" id="clock">05:00</div>
+      <button class="primary" type="button" id="timer-go">开始 5 分钟</button>
+      <button type="button" id="timer-reset">重置</button>
+      <button type="button" id="stuck-close">收起</button>
+    </div>
+  </div>
+
+  <main style="display:flex;flex-direction:column;gap:32px">
+    <section id="morning"><div class="sh"><h2>早晨</h2><span class="count" data-count="morning"></span></div>
+      <p class="intro">07:00 起床，08:15 出门。前一晚准备好的东西会让早上轻很多。</p>
+      <ul class="list" data-list="morning"></ul></section>
+
+    <section id="evening"><div class="sh"><h2>下班后</h2><span class="count" data-count="evening"></span></div>
+      <p class="intro">进门先切换状态，再吃饭。留一段只属于自己的时间。</p>
+      <ul class="list" data-list="evening"></ul></section>
+
+    <section id="night"><div class="sh"><h2>睡前</h2><span class="count" data-count="night"></span></div>
+      <p class="intro">22:30 开始收尾，23:30 熄灯。关机仪式是给明天的自己留的礼物。</p>
+      <ul class="list" data-list="night"></ul></section>
+
+    <section id="chores"><div class="sh"><h2>家务</h2><span class="count" data-count="chores"></span></div>
+      <div class="chore-today"><span class="chip" id="chore-day">周六</span><span>每天两件小事，再加一件今天轮到的。</span></div>
+      <ul class="list" data-list="chores"></ul>
+      <details class="plan"><summary>一周家务轮换表</summary>
+        <div class="table-wrap"><table><tbody id="chore-table"></tbody></table></div>
+      </details></section>
+
+    <section id="care"><div class="sh"><h2>情绪与自我照顾</h2><span class="count" data-count="care"></span></div>
+      <p class="intro">今天的心情是？不用评价它，记下来就好。</p>
+      <div class="mood" id="mood" role="group" aria-label="今天的心情"></div>
+      <ul class="list" data-list="care"></ul>
+      <div class="aid">
+        <h3>情绪急救：状态很差的时候按顺序来</h3>
+        <ol>
+          <li><div><b>先给它起个名字</b><span>「我现在很焦虑」「我很委屈」。说出来，情绪就小一圈。</span></div></li>
+          <li><div><b>先照顾身体</b><span>喝半杯水；吸气 4 秒、屏住 7 秒、呼气 8 秒，做 3 轮；用温水洗手或洗脸。</span></div></li>
+          <li><div><b>把今天的要求降下来</b><span>切到 <button class="linkbtn" type="button" id="to-low">低电量模式</button>，只做核心几件。</span></div></li>
+          <li><div><b>把它移出脑子</b><span>写下来，或者给一个信任的人发一句「我今天有点难受」。</span></div></li>
+          <li><div><b>允许自己休息</b><span>裹上毯子、听一首喜欢的歌、早点睡。难受的日子，活下来就是完成。</span></div></li>
+        </ol>
+        <p class="intro">如果难受持续两周以上，或者有伤害自己的念头，请去找专业的心理咨询或医生，这也是照顾自己的一种。</p>
+      </div>
+    </section>
+  </main>
+
+  <p class="foot" id="sync">勾选会自动保存。每天零点重新开始。</p>
+</div>
+
+<script>
+const SECTIONS = {
+  morning: [
+    {id:"m1", time:"07:00", t:"闹钟放远处，脚落地就拉开窗帘", mini:"坐起来，拉开窗帘", core:1},
+    {id:"m2", time:"07:05", t:"喝一杯温水", mini:"喝三口", core:1},
+    {id:"m3", time:"07:10", t:"洗漱 + 护肤", mini:"洗脸 + 防晒", core:1},
+    {id:"m4", time:"07:25", t:"拉伸 5 分钟，或站在窗边晒晒太阳", mini:"伸一个大大的懒腰", core:0},
+    {id:"m5", time:"07:35", t:"好好吃早餐", mini:"一根香蕉或一盒牛奶", core:1},
+    {id:"m6", time:"07:55", t:"写下今天最重要的一件事", mini:"心里想好一件就行", core:0},
+    {id:"m7", time:"08:10", t:"出门检查：钥匙 · 手机 · 钱包 · 耳机 · 关灯关窗", mini:"钥匙和手机", core:1},
+  ],
+  evening: [
+    {id:"e1", time:"到家", t:"换衣服、洗手，包放回固定位置", mini:"换上家居服", core:1},
+    {id:"e2", time:"19:00", t:"坐下来好好吃晚饭，不刷手机", mini:"外卖也算，坐着吃完", core:1},
+    {id:"e3", time:"19:45", t:"家务 15 分钟（见下面的家务清单）", mini:"定时 5 分钟，做到哪算哪", core:0},
+    {id:"e4", time:"20:00", t:"运动或散步 20 分钟", mini:"下楼走一圈", core:0},
+    {id:"e5", time:"20:30", t:"只属于自己的时间：读书、画画、发呆、做喜欢的事", mini:"做一件让自己开心的小事", core:1},
+  ],
+  night: [
+    {id:"n1", time:"22:30", t:"关机仪式：写下明天的第一件事，然后放下工作", mini:"一句话就好", core:1},
+    {id:"n2", time:"22:40", t:"备好明天：衣服、包、水杯", mini:"把包放到门口", core:0},
+    {id:"n3", time:"22:50", t:"洗漱、护肤、换睡衣", mini:"刷牙", core:1},
+    {id:"n4", time:"23:00", t:"手机放到床够不着的地方充电", mini:"屏幕调到最暗", core:1},
+    {id:"n5", time:"23:05", t:"写三件今天的小确幸", mini:"想一件就好", core:0},
+    {id:"n6", time:"23:30", t:"熄灯，晚安", mini:"躺下闭上眼睛", core:1},
+  ],
+  care: [
+    {id:"c1", time:"", t:"今天至少一次：深呼吸、晒太阳，或者抱抱自己", mini:"三次深呼吸", core:1},
+    {id:"c2", time:"", t:"和一个喜欢的人说说话", mini:"发一个表情也算", core:0},
+    {id:"c3", time:"", t:"对自己说一句好话", mini:"「辛苦啦」", core:1},
+  ],
+};
+const DAILY_CHORES = [
+  {id:"h1", time:"每天", t:"睡前 5 分钟复位：东西放回原处，桌面清空", mini:"只清桌面", core:1},
+  {id:"h2", time:"每天", t:"当天的碗当天洗，水槽清空", mini:"泡上水就行", core:1},
+];
+const WEEKLY = [ // index = getDay()
+  {d:"周日", t:"备餐 + 看一眼下周日程", mini:"洗好下周一的水果"},
+  {d:"周一", t:"洗衣服、晾好", mini:"把脏衣服放进洗衣机"},
+  {d:"周二", t:"擦厨房台面和灶台", mini:"擦灶台"},
+  {d:"周三", t:"浴室快速清洁：洗手台、镜子、马桶", mini:"擦洗手台"},
+  {d:"周四", t:"清冰箱过期食物、倒垃圾", mini:"倒垃圾"},
+  {d:"周五", t:"列采购清单，补日用品", mini:"在手机里记下缺什么"},
+  {d:"周六", t:"大扫除一个区域 + 隔周换床单", mini:"吸一个房间的地"},
+];
+const MOODS = [["晴","很好"],["云","还行"],["雾","有点乱"],["雨","难过"],["雷","烦躁"]];
+
+const pad = n => String(n).padStart(2,"0");
+const keyOf = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const now = new Date();
+const TODAY = keyOf(now);
+const dow = now.getDay();
+const wk = WEEKLY[dow];
+SECTIONS.chores = [...DAILY_CHORES, {id:"w"+dow, time:wk.d, t:wk.t, mini:wk.mini, core:0}];
+
+let state = {date:TODAY, done:{}, mode:"normal", mood:null};
+let history = {}; // date -> {pct, mood}
+let db = null;
+
+const check = '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="var(--on-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function buildLists(){
+  for (const [sec, items] of Object.entries(SECTIONS)) {
+    const ul = document.querySelector(`[data-list="${sec}"]`);
+    ul.innerHTML = items.map(it => `<li><button class="item" type="button" role="checkbox" aria-checked="false" data-id="${it.id}" data-core="${it.core}">
+      <span class="box">${check}</span>
+      <span><span class="t">${esc(it.t)}</span><span class="mini"><b>最小版</b> · ${esc(it.mini)}</span></span>
+      <span class="time">${esc(it.time)}</span></button></li>`).join("");
+  }
+  document.getElementById("mood").innerHTML = MOODS.map(([k,l]) => `<button type="button" aria-pressed="false" data-mood="${k}"><span>${k}</span>${l}</button>`).join("");
+  document.getElementById("chore-table").innerHTML = [0,1,2,3,4,5,6].map(i => { const w = WEEKLY[(i+1)%7]; return `<tr class="${(i+1)%7===dow?"is-today":""}"><th>${w.d}</th><td>${esc(w.t)}</td></tr>`; }).join("");
+  document.getElementById("chore-day").textContent = "今天" + wk.d;
+}
+
+function visibleItems(){
+  const all = Object.values(SECTIONS).flat();
+  return state.mode === "low" ? all.filter(i => i.core) : all;
+}
+function pctOf(s){
+  const all = Object.values(SECTIONS).flat();
+  const items = s.mode === "low" ? all.filter(i => i.core) : all;
+  const n = items.filter(i => s.done && s.done[i.id]).length;
+  return items.length ? n / items.length : 0;
+}
+
+function render(){
+  const low = state.mode === "low";
+  document.body.classList.toggle("is-low", low);
+  document.getElementById("mode-normal").setAttribute("aria-pressed", String(!low));
+  document.getElementById("mode-low").setAttribute("aria-pressed", String(low));
+  document.getElementById("lownote").hidden = !low;
+  document.querySelectorAll(".item").forEach(b => b.setAttribute("aria-checked", String(!!state.done[b.dataset.id])));
+  document.querySelectorAll("#mood button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.mood === state.mood)));
+  for (const [sec, items] of Object.entries(SECTIONS)) {
+    const vis = low ? items.filter(i => i.core) : items;
+    document.querySelector(`[data-count="${sec}"]`).textContent = `${vis.filter(i => state.done[i.id]).length} / ${vis.length}`;
+  }
+  const vis = visibleItems(); const n = vis.filter(i => state.done[i.id]).length;
+  document.getElementById("overall-num").textContent = `${n} / ${vis.length}`;
+  document.getElementById("overall-bar").style.width = (vis.length ? n / vis.length * 100 : 0) + "%";
+  history[TODAY] = {pct: pctOf(state), mood: state.mood};
+  renderWeek();
+}
+
+function renderWeek(){
+  const names = ["日","一","二","三","四","五","六"]; let html = "";
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now); d.setDate(d.getDate() - i); const k = keyOf(d); const h = history[k];
+    html += `<div class="day ${i===0?"today":""}"><span class="m">${h && h.mood ? h.mood : ""}</span><div class="dot" title="${k}"><i style="height:${h ? Math.round(h.pct*100) : 0}%"></i></div><span>${names[d.getDay()]}</span></div>`;
+  }
+  document.getElementById("week").innerHTML = html;
+}
+
+function greet(){
+  const h = now.getHours();
+  const [a, b] = h < 11 ? ["早安呀", "今天只需要一件一件来。"] : h < 18 ? ["下午好", "累了就先喝口水。"] : ["晚上好", "今天辛苦啦，慢慢收尾。"];
+  document.getElementById("hello").innerHTML = `${a}<small>${b}</small>`;
+  document.getElementById("date").textContent = `${TODAY} · ${wk.d}`;
+}
+
+// ---------- saving ----------
+let saveTimer = null, saving = false, dirty = false;
+function lsSet(){ try { localStorage.setItem("sop:" + TODAY, JSON.stringify(state)); } catch(e){} }
+function scheduleSave(){ lsSet(); dirty = true; clearTimeout(saveTimer); saveTimer = setTimeout(flush, 700); }
+async function flush(){
+  if (!db || saving || !dirty) return;
+  saving = true; dirty = false;
+  try {
+    await db.doc("days/" + TODAY).set({date: TODAY, done: state.done, mode: state.mode, mood: state.mood, pct: Math.round(pctOf(state)*100)/100, updatedAt: new Date().toISOString()});
+    setSync("已保存。每天零点重新开始。");
+  } catch (e) {
+    setSync(e && e.code === "invalid_argument" ? "你现在只有查看权限，勾选只存在这台设备上。" : "暂时没存上，稍后会再试。");
+    if (e && e.code === "unavailable") dirty = true;
+  }
+  saving = false;
+  if (dirty) saveTimer = setTimeout(flush, 1500);
+}
+function setSync(t){ document.getElementById("sync").textContent = t; }
+
+// ---------- events ----------
+document.addEventListener("click", e => {
+  const item = e.target.closest(".item");
+  if (item) { const id = item.dataset.id; if (state.done[id]) delete state.done[id]; else state.done[id] = true; render(); scheduleSave(); return; }
+  const m = e.target.closest("#mood button");
+  if (m) { state.mood = state.mood === m.dataset.mood ? null : m.dataset.mood; render(); scheduleSave(); }
+});
+function setMode(mode){ if (state.mode === mode) return; state.mode = mode; render(); scheduleSave(); }
+document.getElementById("mode-normal").onclick = () => setMode("normal");
+document.getElementById("mode-low").onclick = () => setMode("low");
+document.getElementById("to-low").onclick = () => { setMode("low"); window.scrollTo({top:0, behavior:"smooth"}); };
+
+// stuck timer
+let left = 300, tick = null;
+const clock = document.getElementById("clock"), go = document.getElementById("timer-go");
+const showClock = () => { clock.textContent = `${pad(Math.floor(left/60))}:${pad(left%60)}`; };
+function stopTimer(){ clearInterval(tick); tick = null; }
+go.onclick = () => {
+  if (tick) { stopTimer(); go.textContent = "继续"; return; }
+  if (left <= 0) left = 300;
+  go.textContent = "暂停";
+  tick = setInterval(() => { left--; showClock(); if (left <= 0) { stopTimer(); clock.textContent = "完成！"; go.textContent = "再来 5 分钟"; } }, 1000);
+};
+document.getElementById("timer-reset").onclick = () => { stopTimer(); left = 300; showClock(); go.textContent = "开始 5 分钟"; };
+document.getElementById("stuck-open").onclick = () => { const p = document.getElementById("stuck"); p.hidden = !p.hidden; if (!p.hidden) p.scrollIntoView({behavior:"smooth", block:"nearest"}); };
+document.getElementById("stuck-close").onclick = () => { document.getElementById("stuck").hidden = true; };
+
+// ---------- boot ----------
+buildLists(); greet();
+try {
+  const s = JSON.parse(localStorage.getItem("sop:" + TODAY) || "null");
+  if (s && s.date === TODAY) state = {...state, ...s};
+  for (let i = 1; i < 7; i++) { const d = new Date(now); d.setDate(d.getDate()-i); const k = keyOf(d); const v = JSON.parse(localStorage.getItem("sop:" + k) || "null"); if (v) history[k] = {pct: pctOf(v), mood: v.mood}; }
+} catch(e){}
+render();
+
+(async () => {
+  if (!window.claude || !claude.use) return;
+  db = await claude.use("db");
+  if (!db) { setSync("勾选保存在这台设备上。每天零点重新开始。"); return; }
+  try {
+    const snap = await db.collection("days").orderBy("date", "desc").limit(7).get();
+    for (const d of snap.docs) {
+      const v = d.data(); if (!v) continue;
+      if (d.id === TODAY) { if (!dirty) state = {date: TODAY, done: v.done || {}, mode: v.mode || "normal", mood: v.mood || null}; }
+      else history[d.id] = {pct: typeof v.pct === "number" ? v.pct : pctOf(v), mood: v.mood || null};
+    }
+    render(); lsSet(); setSync("已同步。每天零点重新开始。");
+    if (dirty) flush();
+  } catch (e) { setSync("暂时连不上云端，先存在这台设备上。"); }
+})();
+</script>
