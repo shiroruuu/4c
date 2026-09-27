@@ -55,6 +55,7 @@ export type Store = {
   settings: { season: 'auto' | 'summer' | 'winter'; weekSwap: boolean; theme: string };
 };
 
+// 存储键名保留旧名字，改掉会丢失已有的打勾记录
 const KEY = 'xiaorizi-sop-v1';
 
 export function loadStore(): Store {
