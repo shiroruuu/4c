@@ -200,7 +200,7 @@ export default function App() {
         </div>
       </header>
 
-      <section className="card switches" aria-label="今天的情况">
+      <section className="card switches tone-5" aria-label="今天的情况">
         <h2>今天</h2>
         <div className="row">
           <Toggle on={low} onClick={() => setDay({ low: !low })} tone="low">
@@ -274,8 +274,8 @@ export default function App() {
 
       <main className="timeline">
         {low && <p className="lownote">低电量模式：只留下吃饭、洗澡、吃药、睡觉。做到这些，今天就算完成。</p>}
-        {visible.map((sec) => (
-          <section key={sec.id} className="sec">
+        {visible.map((sec, i) => (
+          <section key={sec.id} className={`sec tone-${(i % 5) + 1}`}>
             <div className="sh">
               <h2>{sec.title}</h2>
               <span className="count">
@@ -320,12 +320,12 @@ export default function App() {
 
       {!low && (
         <>
-          <Food store={store} today={today} update={update} />
-          <WeekendPool store={store} today={today} update={update} markLast={markLast} />
-          <Money store={store} today={today} update={update} />
-          <Periodic store={store} today={today} update={update} />
-          <ResidenceCard store={store} today={today} update={update} />
-          <Settings store={store} update={update} />
+          <div className="tone-2"><Food store={store} today={today} update={update} /></div>
+          <div className="tone-3"><WeekendPool store={store} today={today} update={update} markLast={markLast} /></div>
+          <div className="tone-4"><Money store={store} today={today} update={update} /></div>
+          <div className="tone-5"><Periodic store={store} today={today} update={update} /></div>
+          <div className="tone-1"><ResidenceCard store={store} today={today} update={update} /></div>
+          <div className="tone-2"><Settings store={store} update={update} /></div>
         </>
       )}
       <p className="foot">打勾都保存在这台手机的浏览器里。凌晨 4 点以前还算前一天。</p>

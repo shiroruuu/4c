@@ -30,8 +30,10 @@ export const DEFAULT_THEME = '15';
 export function themeCss(id: string) {
   const t = THEMES.find((x) => x.id === id) ?? THEMES[0];
   const darkBg = `color-mix(in srgb, ${t.ink} 45%, #0c0c10)`;
+  const sw = t.swatches.map((c, i) => `--c${i + 1}:${c};`).join('');
   return `
 :root{
+  ${sw}
   --bg:${t.bg};
   --surface:color-mix(in srgb, #ffffff 72%, ${t.bg});
   --surface-2:color-mix(in srgb, ${t.soft} 38%, ${t.bg});

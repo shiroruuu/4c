@@ -7,6 +7,7 @@
   --serif: "Noto Serif SC", "Songti SC", serif;
   --sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --c1: #F1EFE0; --c2: #AACABD; --c3: #A8D7C5; --c4: #73B697; --c5: #5B8C89;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
@@ -18,6 +19,32 @@
     color-scheme: dark;
   }
 }
+/* 每套配色的 5 个颜色：tN = 浅底色，sN = 深一点、放白色勾也看得清 */
+:root {
+  --t1: color-mix(in srgb, var(--c1) 55%, var(--bg)); --s1: color-mix(in srgb, var(--c1) 58%, var(--ink));
+  --t2: color-mix(in srgb, var(--c2) 55%, var(--bg)); --s2: color-mix(in srgb, var(--c2) 58%, var(--ink));
+  --t3: color-mix(in srgb, var(--c3) 55%, var(--bg)); --s3: color-mix(in srgb, var(--c3) 58%, var(--ink));
+  --t4: color-mix(in srgb, var(--c4) 55%, var(--bg)); --s4: color-mix(in srgb, var(--c4) 58%, var(--ink));
+  --t5: color-mix(in srgb, var(--c5) 55%, var(--bg)); --s5: color-mix(in srgb, var(--c5) 58%, var(--ink));
+  --on-strong: #fff;
+  --sec: var(--c4); --sec-tint: var(--t4); --sec-strong: var(--s4);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --t1: color-mix(in srgb, var(--c1) 40%, var(--bg)); --s1: var(--c1);
+    --t2: color-mix(in srgb, var(--c2) 40%, var(--bg)); --s2: var(--c2);
+    --t3: color-mix(in srgb, var(--c3) 40%, var(--bg)); --s3: var(--c3);
+    --t4: color-mix(in srgb, var(--c4) 40%, var(--bg)); --s4: var(--c4);
+    --t5: color-mix(in srgb, var(--c5) 40%, var(--bg)); --s5: var(--c5);
+    --on-strong: #15151a;
+  }
+}
+.tone-1 { --sec: var(--c1); --sec-tint: var(--t1); --sec-strong: var(--s1); }
+.tone-2 { --sec: var(--c2); --sec-tint: var(--t2); --sec-strong: var(--s2); }
+.tone-3 { --sec: var(--c3); --sec-tint: var(--t3); --sec-strong: var(--s3); }
+.tone-4 { --sec: var(--c4); --sec-tint: var(--t4); --sec-strong: var(--s4); }
+.tone-5 { --sec: var(--c5); --sec-tint: var(--t5); --sec-strong: var(--s5); }
+
 * { box-sizing: border-box; }
 html, body { margin: 0; }
 body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.55; -webkit-tap-highlight-color: transparent; }
@@ -36,7 +63,10 @@ h1, h2 { font-family: var(--serif); margin: 0; text-wrap: balance; }
 .chip.warn { background: var(--urgent-soft); color: var(--urgent); }
 .progress { display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .track { flex: 1; height: 6px; border-radius: 99px; background: var(--surface-2); overflow: hidden; }
-.track i { display: block; height: 100%; background: var(--accent); transition: width .35s ease; }
+.track i { display: block; height: 100%; background: linear-gradient(90deg, var(--s1), var(--s2), var(--s3), var(--s4), var(--s5)); background-size: 100vw 100%; transition: width .35s ease; }
+.top { background: linear-gradient(135deg, var(--t1), var(--t2) 30%, var(--t3) 55%, var(--t4) 80%, var(--t5)); border-radius: 20px; padding: 16px; }
+.chips .chip:nth-child(5n+1) { background: var(--t1); } .chips .chip:nth-child(5n+2) { background: var(--t3); } .chips .chip:nth-child(5n+3) { background: var(--t5); }
+.top .chip { background: color-mix(in srgb, var(--surface) 70%, transparent) !important; }
 
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
 .card h2 { font-size: 17px; }
@@ -60,7 +90,7 @@ details.card[open] > summary h2::after { content: " ⌄"; }
 
 .alerts { display: flex; flex-direction: column; gap: 6px; }
 .alerts:empty { display: none; }
-.alert { margin: 0; font-size: 14px; padding: 9px 12px; border-radius: 12px; background: var(--surface-2); }
+.alert { margin: 0; font-size: 14px; padding: 9px 12px; border-radius: 12px; background: var(--t2); }
 .alert.warn { background: var(--warn-soft); }
 .alert.urgent { background: var(--urgent-soft); }
 .alert.withbtn { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
@@ -126,3 +156,21 @@ li.free span:last-child { grid-column: 2; grid-row: 1; }
 .theme[aria-pressed="true"] .tname { color: var(--ink); }
 .foot { text-align: center; font-size: 12px; color: var(--muted); margin: 0; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* ---- 让 5 个颜色都用上 ---- */
+.sh h2, details.card > summary h2, .card > h2 { display: inline-block; padding: 2px 12px; border-radius: 99px; background: var(--sec-tint); }
+.item[aria-checked="true"] .box { background: var(--sec-strong); border-color: var(--sec-strong); }
+.box { border-color: color-mix(in srgb, var(--sec-strong) 45%, var(--line)); }
+.box svg { stroke: var(--on-strong); }
+li.free { background: color-mix(in srgb, var(--sec-tint) 55%, var(--surface)); }
+.list { border-color: color-mix(in srgb, var(--sec) 45%, var(--line)); }
+.row .toggle:nth-child(5n+1)[aria-pressed="true"] { background: var(--t1); border-color: var(--s1); }
+.row .toggle:nth-child(5n+2)[aria-pressed="true"] { background: var(--t2); border-color: var(--s2); }
+.row .toggle:nth-child(5n+3)[aria-pressed="true"] { background: var(--t3); border-color: var(--s3); }
+.row .toggle:nth-child(5n+4)[aria-pressed="true"] { background: var(--t4); border-color: var(--s4); }
+.row .toggle:nth-child(5n+5)[aria-pressed="true"] { background: var(--t5); border-color: var(--s5); }
+.row .toggle.low[aria-pressed="true"] { background: var(--low-soft); border-color: var(--low); }
+.stats div:nth-child(1) { background: var(--t2); } .stats div:nth-child(2) { background: var(--t4); }
+.btn { border-color: var(--sec-strong); background: var(--sec-tint); }
+.switches { background: linear-gradient(180deg, color-mix(in srgb, var(--t5) 40%, var(--surface)), var(--surface)); }
+.theme[aria-pressed="true"] { border-color: var(--s4); box-shadow: 0 0 0 2px var(--t4); }
